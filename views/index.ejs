@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>SSH Terminal</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.css"
+    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/addons/fit/fit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+    <script>
+      var socket;
+      window.addEventListener(
+        "load",
+        function() {
+          var terminalContainer = document.getElementById("terminal-container");
+          Terminal.applyAddon(fit);
+          var term = new Terminal({ cursorBlink: true });
+          term.open(terminalContainer);
+          term.fit();
+
+          socket = io.connect();
+          socket.on("connect", function() {
+            term.write("\r\n*** Connected to backend***\r\n");
+
+            // Browser -> Backend
+            term.on("data", function(data) {
+              socket.emit("data", data);
+            });
+
+            // Backend -> Browser
+            socket.on("data", function(data) {
+              term.write(data);
+            });
+
+            socket.on("disconnect", function() {
+              term.write("\r\n*** Disconnected from backend***\r\n");
+            });
+
+            socket.on("redirect", function(url) {
+              window.location.href = url;
+            });
+          });
+        },
+        false
+      );
+    </script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="terminal-container" ></div>
+    </div>
+  </body>
+</html>

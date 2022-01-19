@@ -1,0 +1,17 @@
+{
+  "name": "ssh-client-connection",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Jay Goyal",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "socket.io": "^4.4.1",
+    "ssh2": "^1.5.0",
+    "utf8": "^3.0.0"
+  }
+}
