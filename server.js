@@ -30,7 +30,7 @@ app.post("/ssh", (req, res) => {
   port = req.body.port;
   res.render("index");
 });
-server.listen(serverPort);
+server.listen(process.env.PORT||serverPort);
 
 //socket.io instantiation
 const io = require("socket.io")(server);
